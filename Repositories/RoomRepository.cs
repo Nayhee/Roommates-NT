@@ -30,6 +30,41 @@ namespace Roommates.Repositories
             }
         }
 
+        public void Delete(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    // What do you think this code will do if there is a roommate in the room we're deleting???
+                    cmd.CommandText = "DELETE FROM Room WHERE Id = @id";
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void Update(Room room)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"UPDATE Room
+                                    SET Name = @name,
+                                        MaxOccupancy = @maxOccupancy
+                                    WHERE Id = @id";
+                    cmd.Parameters.AddWithValue("@name", room.Name);
+                    cmd.Parameters.AddWithValue("@maxOccupancy", room.MaxOccupancy);
+                    cmd.Parameters.AddWithValue("@id", room.Id);
+
+                    cmd.ExecuteNonQuery(); //uses ExecuteNonQuery instead of Reader because we don't need anything back. Just telling it to update. 
+                }
+            }
+        }
+
         public Room GetById(int id)
         {
             using (SqlConnection conn = Connection)
