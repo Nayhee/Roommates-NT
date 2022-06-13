@@ -31,7 +31,10 @@ namespace Roommates.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"Select Count(rmc.ChoreId) as NumChores, rm.Id, rm.FirstName, rm.LastName from RoommateChore rmc join Roommate rm on rm.Id = rmc.RoommateId group by rm.Id, rm.FirstName, rm.LastName;";
+                    cmd.CommandText = @"SELECT Count(rmc.ChoreId) as NumChores, rm.Id, rm.FirstName, rm.LastName 
+                                        FROM RoommateChore rmc 
+                                        JOIN Roommate rm on rm.Id = rmc.RoommateId 
+                                        GROUP BY rm.Id, rm.FirstName, rm.LastName;";
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -76,7 +79,10 @@ namespace Roommates.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "select c.Id, c.Name FROM Chore c left join RoommateChore rmc on rmc.ChoreId = c.Id where rmc.ChoreId is null";
+                    cmd.CommandText = @"SELECT c.Id, c.Name 
+                                        FROM Chore c 
+                                        LEFT JOIN RoommateChore rmc on rmc.ChoreId = c.Id 
+                                        WHERE rmc.ChoreId is null";
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
